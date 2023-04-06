@@ -24,15 +24,23 @@ export const signin = async (req, res, next) => {
         const user = await User.findOne({email}).select("+password");
         if (!user) return next(createError(404, "User Not Found"));
 
+        if (typeof password !== "string") {
+            password = password.toString();
+        }
+
+        if (typeof user.password !== "string") {
+            user.password = user.password.toString();
+        }
+
         const isCorrectPassword = await bcrypt.compare(
-            password,
+            req.body.password,
             user.password
         );
 
         if (!isCorrectPassword)
             return next(createError(400, "Please Enter correct details"));
         
-        const token = jwt.sign({ _id: user._id }, process.env.JWT)
+        const token = jwt.sign({ id: user._id }, process.env.JWT)
         res.cookie("access_token", token, {
         maxAge: 86400000, 
         httpOnly: true,
