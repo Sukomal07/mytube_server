@@ -20,27 +20,19 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
+        const {email , password} = req.body
+        const user = await User.findOne({email}).select("+password");
         if (!user) return next(createError(404, "User Not Found"));
 
-        if (typeof req.body.password !== "string") {
-            req.body.password = req.body.password.toString();
-        }
-
-        if (typeof user.password !== "string") {
-            user.password = user.password.toString();
-        }
-
         const isCorrectPassword = await bcrypt.compare(
-            req.body.password,
+            password,
             user.password
         );
 
         if (!isCorrectPassword)
             return next(createError(400, "Please Enter correct details"));
         
-            const token = jwt.sign({ id: user._id }, process.env.JWT)
-            const {password, ...others} = user._doc
+        const token = jwt.sign({ _id: user._id }, process.env.JWT)
         res.cookie("access_token", token, {
         maxAge: 86400000, 
         httpOnly: true,
