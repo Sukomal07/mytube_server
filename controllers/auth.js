@@ -24,8 +24,9 @@ export const signin = async (req, res, next) => {
         const user = await User.findOne({email}).select("+password");
         if (!user) return next(createError(404, "User Not Found"));
 
+        let newPassword = password;
         if (typeof password !== "string") {
-            password = password.toString();
+            newPassword = password.toString();
         }
 
         if (typeof user.password !== "string") {
@@ -33,7 +34,7 @@ export const signin = async (req, res, next) => {
         }
 
         const isCorrectPassword = await bcrypt.compare(
-            req.body.password,
+            newPassword,
             user.password
         );
 
@@ -41,6 +42,7 @@ export const signin = async (req, res, next) => {
             return next(createError(400, "Please Enter correct details"));
         
         const token = jwt.sign({ id: user._id }, process.env.JWT)
+        const { newpassword, ...others } = user._doc;
         res.cookie("access_token", token, {
         maxAge: 86400000, 
         httpOnly: true,
@@ -51,4 +53,5 @@ export const signin = async (req, res, next) => {
         next(error);
     }
 };
+
 
