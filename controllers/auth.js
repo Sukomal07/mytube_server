@@ -63,7 +63,7 @@ export const googleAuth = async(req, res, next) =>{
             secure:process.env.NODE_ENV === "Development" ? false: true
             }).status(200).json(user._doc)
         }else{
-            const newUser = new User.create({...req.body, fromGoogle:true})
+            const newUser = await User.create({...req.body, fromGoogle:true})
             const savedUser = await newUser.save()
             const token = jwt.sign({id: savedUser._id} , process.env.JWT)
             res.cookie("access_token", token, 
