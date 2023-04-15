@@ -59,6 +59,7 @@ export const googleAuth = async (req, res, next) => {
             res.cookie("access_token", token,
                 {
                     httpOnly: true,
+                    maxAge: 86400000,
                     sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
                     secure: process.env.NODE_ENV === "Development" ? false : true
                 }).status(200).json(user._doc)
@@ -69,6 +70,7 @@ export const googleAuth = async (req, res, next) => {
             res.cookie("access_token", token,
                 {
                     httpOnly: true,
+                    maxAge: 86400000,
                     sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
                     secure: process.env.NODE_ENV === "Development" ? false : true
                 }).status(200).json(savedUser._doc)
