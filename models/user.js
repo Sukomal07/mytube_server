@@ -27,7 +27,11 @@ const UserSchema = new mongoose.Schema({
     fromGoogle:{
         type:Boolean,
         default:false
-    }
+    },
+    history: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Video'
+    }]
 },{timestamps:true}
 )
 export default mongoose.model("User",UserSchema)
