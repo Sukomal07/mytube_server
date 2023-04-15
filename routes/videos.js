@@ -1,7 +1,6 @@
 import express from 'express'
 import { addVideo, addView, deleteVideo, getByTag, getVideo, random, search, sub, trend, updateVideo } from '../controllers/video.js'
 import { verifyToken } from '../verifyToken.js'
-import { addHistory } from '../controllers/video.js'
 
 const router = express.Router()
 
@@ -15,5 +14,5 @@ router.get("/random",random)
 router.get("/sub",verifyToken, sub)
 router.get("/tags", getByTag)
 router.get("/search", search)
-router.post('/history', verifyToken, addHistory);
+
 export default router

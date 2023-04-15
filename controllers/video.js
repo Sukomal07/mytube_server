@@ -120,22 +120,3 @@ export const search = async (req, res , next) =>{
         next(error) 
     }
 }
-
-export const addHistory = async (req, res, next) => {
-    const videoId = req.params.id
-    const userId = req.user.id
-
-    try {
-        // Find the video
-        const video = await Video.findById(videoId)
-        if (!video) {
-            return next(createError(404, "Video not found"))
-        }
-
-        // Find the user and add the video to their history
-        const user = await User.findByIdAndUpdate(userId, { $push: { history: videoId } }, { new: true })
-        res.status(200).json(user)
-    } catch (error) {
-        next(error)
-    }
-}
