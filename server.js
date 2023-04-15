@@ -20,9 +20,12 @@ app.use("*",
     cors({
         origin:[process.env.FRONTTEND_URL],
         methods:["GET","POST","PUT","DELETE"],
-        credentials:true
+        credentials:true,
+        allowedHeaders: ["Content-Type", "Authorization"],
+        exposedHeaders: ["Content-Disposition"],
     })
 )
+
 app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/videos", videoRoutes)
