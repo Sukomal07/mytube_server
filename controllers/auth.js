@@ -45,6 +45,8 @@ export const signin = async (req, res, next) => {
         res.cookie("access_token", token, {
             httpOnly: true,
             maxAge: 86400000,
+            sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+            secure: process.env.NODE_ENV === "Development" ? false : true
         }).status(200).json(others)
     } catch (error) {
         next(error);
@@ -59,6 +61,8 @@ export const googleAuth = async (req, res, next) => {
                 {
                     httpOnly: true,
                     maxAge: 86400000,
+                    sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+                    secure: process.env.NODE_ENV === "Development" ? false : true
                 }).status(200).json(user._doc)
         } else {
             const newUser = await User.create({ ...req.body, fromGoogle: true })
@@ -68,6 +72,8 @@ export const googleAuth = async (req, res, next) => {
                 {
                     httpOnly: true,
                     maxAge: 86400000,
+                    sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+                    secure: process.env.NODE_ENV === "Development" ? false : true
                 }).status(200).json(savedUser._doc)
         }
     } catch (error) {
@@ -76,10 +82,10 @@ export const googleAuth = async (req, res, next) => {
 }
 export const signout = (req, res, next) => {
     try {
-        res.cookie('access_token', null, {
-            httpOnly: true,
-            maxAge: 0,
-        })
+        res.clearCookie("access_token", {
+            sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+            secure: process.env.NODE_ENV === "Development" ? false : true,
+        });
         res.status(200).send("User has been logged out");
     } catch (error) {
         next(error);
