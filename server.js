@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import { connectDb } from './data/database.js'
 import cors from 'cors'
-import path from 'path'
 
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/users.js'
@@ -34,12 +33,6 @@ app.use((err, req, res, next) => {
         status,
         message
     })
-})
-
-app.use(express.static(path.join(__dirname, '../client/build')))
-
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"))
 })
 
 app.get("/", (req, res) => {
