@@ -15,6 +15,12 @@ dotenv.config()
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
